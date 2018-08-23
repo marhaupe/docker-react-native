@@ -1,0 +1,13 @@
+build:
+  stage: build
+  tags:
+    - docker
+  only:
+    - master
+  script:
+    - "docker login -u $DOCKER_USER -p $DOCKER_PASSWORD"
+    - "docker build -t marhaupe/docker-react-native ."
+    - "docker push marhaupe/docker-react-native"
+
+stages: 
+  - build

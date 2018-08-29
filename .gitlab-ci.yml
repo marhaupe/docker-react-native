@@ -7,7 +7,18 @@ build:
   script:
     - "docker login -u $DOCKER_USER -p $DOCKER_PASSWORD"
     - "docker build -t marhaupe/docker-react-native ."
+
+push:
+  stage: push
+  when: manual
+  allow_failure: false
+  tags: 
+    - docker
+  only:
+    - master
+  script:
     - "docker push marhaupe/docker-react-native"
 
 stages: 
   - build
+  - push

@@ -19,6 +19,17 @@ push:
   script:
     - "docker push marhaupe/docker-react-native"
 
+cleanup:
+  stage: cleanup
+  when: always
+  tags:
+    - docker
+  only:
+    - master
+  script:
+    - docker image prune -f
+
 stages: 
   - build
   - push
+  - cleanup

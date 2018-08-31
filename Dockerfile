@@ -48,7 +48,7 @@ RUN apt-get update -y && \
 	apt-get clean
 
 RUN gem install fastlane
-
+ENV PATH=${PATH}:${HOME}/.fastlane/bin
 # fix crashing gradle because of non ascii characters in ENV variables: https://github.com/gradle/gradle/issues/3117
 RUN localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'

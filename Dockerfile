@@ -17,10 +17,6 @@ ENV PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}
 
 ENV GRADLE_OPTS="-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs=\"-Xmx512m -XX:+HeapDumpOnOutOfMemoryError\""
 
-# Installing Yarn
-RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add - && \
-	echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-
 # install system dependencies
 RUN apt-get update -y && \
 	apt-get install -y \
@@ -52,7 +48,15 @@ RUN apt-get update -y && \
 	apt-get autoremove -y && \
 	apt-get clean
 
-RUN gem install fastlane
+# Installing Yarn
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
+	echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+
+RUN apt-get update -y && \
+	apt-get install -y \
+	yarn \
+
+	RUN gem install fastlane
 ENV PATH=${PATH}:${HOME}/.fastlane/bin
 # fix crashing gradle because of non ascii characters in ENV variables: https://github.com/gradle/gradle/issues/3117
 RUN localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8

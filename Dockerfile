@@ -20,7 +20,6 @@ ENV GRADLE_OPTS="-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs=\"-Xmx512m -XX:+
 # install system dependencies
 RUN apt-get update -y && \
 	apt-get install -y \
-	yarn \
 	autoconf \
 	automake \
 	expect \

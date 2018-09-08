@@ -47,7 +47,6 @@ RUN apt-get update -y && \
 	apt-get autoremove -y && \
 	apt-get clean
 
-
 RUN gem install fastlane
 ENV PATH=${PATH}:${HOME}/.fastlane/bin
 # fix crashing gradle because of non ascii characters in ENV variables: https://github.com/gradle/gradle/issues/3117
@@ -83,13 +82,6 @@ RUN npm config set spin=false
 RUN npm config set progress=false
 
 RUN npm install -g react-native-cli
-
-# Installing Yarn
-RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
-	echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-
-RUN apt-get update -y && \
-	apt-get install -y yarn 
 
 # Full reference at https://dl.google.com/android/repository/repository2-1.xml
 # download and unpack android

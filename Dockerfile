@@ -85,7 +85,7 @@ RUN npm config set spin=false && \
 RUN mkdir -p /opt/android && \
 	mkdir -p /opt/tools && \
 	cd /opt/android && \
-	curl --silent https://dl.google.com/android/repository/build-tools_r$ANDROID_TOOLS_VERSION-linux.zip > android.zip && \
+	curl --silent https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip > android.zip && \
 	unzip android.zip && \
 	rm android.zip
 
@@ -100,7 +100,7 @@ RUN mkdir -p $ANDROID_HOME/licenses/ \
 RUN /opt/tools/android-accept-licenses.sh "$ANDROID_HOME/tools/bin/sdkmanager \
 	tools \
 	\"platform-tools\" \
-	\"build-tools;25.0.3\" \
+	\"build-tools;26.0.3\" \
 	\"platforms;android-23\" \
 	\"platforms;android-25\" \
 	\"platforms;android-26\" \

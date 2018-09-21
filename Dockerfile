@@ -76,16 +76,16 @@ RUN set -ex \
 	&& ln -s /usr/bin/node /usr/bin/nodejs
 
 # configure npm
-RUN npm config set spin=false
-RUN npm config set progress=false
-
-RUN npm install -g react-native-cli
+RUN npm config set spin=false && \
+	npm config set progress=false && \
+	npm install -g react-native-cli
 
 # Full reference at https://dl.google.com/android/repository/repository2-1.xml
 # download and unpack android
-RUN mkdir -p /opt/android && mkdir -p /opt/tools
-WORKDIR /opt/android
-RUN curl --silent https://dl.google.com/android/repository/build-tools_r$ANDROID_TOOLS_VERSION-linux.zip > android.zip && \
+RUN mkdir -p /opt/android && \
+	mkdir -p /opt/tools && \
+	cd /opt/android && \
+	curl --silent https://dl.google.com/android/repository/build-tools_r$ANDROID_TOOLS_VERSION-linux.zip > android.zip && \
 	unzip android.zip && \
 	rm android.zip
 

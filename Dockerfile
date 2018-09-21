@@ -4,18 +4,19 @@ FROM library/ubuntu:16.04
 
 # set default build arguments
 ARG ANDROID_TOOLS_VERSION=26.0.3
-ENV NPM_CONFIG_LOGLEVEL info
 ARG NODE_VERSION=9.5.0
 
 
-# set default environment variables
-ENV ADB_INSTALL_TIMEOUT=10
-ENV PATH=${PATH}:/opt/buck/bin/
-ENV ANDROID_HOME=/opt/android
-ENV ANDROID_SDK_HOME=${ANDROID_HOME}
-ENV PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools
-
-ENV GRADLE_OPTS="-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs=\"-Xmx512m -XX:+HeapDumpOnOutOfMemoryError\""
+ENV GRADLE_OPTS="-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs=\"-Xmx512m -XX:+HeapDumpOnOutOfMemoryError\"" \
+	LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8' \
+	ADB_INSTALL_TIMEOUT=10 \
+	PATH=${PATH}:/opt/buck/bin/ \
+	ANDROID_HOME=/opt/android \
+	ANDROID_SDK_HOME=${ANDROID_HOME} \
+	PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools \
+	PATH=${PATH}:${HOME}/.fastlane/bin \
+	NPM_CONFIG_LOGLEVEL=info \
+	PATH=${PATH}:/opt/tools
 
 # install system dependencies
 RUN apt-get update -y && \
@@ -45,13 +46,10 @@ RUN apt-get update -y && \
 	&& \
 	rm -rf /var/lib/apt/lists/* && \
 	apt-get autoremove -y && \
-	apt-get clean
+	apt-get clean 
 
-RUN gem install fastlane
-ENV PATH=${PATH}:${HOME}/.fastlane/bin
 # fix crashing gradle because of non ascii characters in ENV variables: https://github.com/gradle/gradle/issues/3117
 RUN localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
-ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 
 # install nodejs
 # https://github.com/nodejs/docker-node/blob/a5141d841167d109bcad542c9fb636607dabc8b1/6.10/Dockerfile
@@ -93,7 +91,6 @@ RUN curl --silent https://dl.google.com/android/repository/tools_r$ANDROID_TOOLS
 
 # copy tools folder
 COPY tools/android-accept-licenses.sh /opt/tools/android-accept-licenses.sh
-ENV PATH ${PATH}:/opt/tools
 
 RUN mkdir -p $ANDROID_HOME/licenses/ \
 	&& echo "d56f5187479451eabf01fb78af6dfcb131a6481e" > $ANDROID_HOME/licenses/android-sdk-license \
@@ -112,6 +109,9 @@ RUN /opt/tools/android-accept-licenses.sh "$ANDROID_HOME/tools/bin/sdkmanager \
 	\"add-ons;addon-google_apis-google-24\" \
 	\"extras;google;google_play_services\"" \
 	&& $ANDROID_HOME/tools/bin/sdkmanager --update
+
+# Install fastlane 
+RUN gem install fastlane
 
 VOLUME ["/app"]
 WORKDIR /app

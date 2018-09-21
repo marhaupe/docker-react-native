@@ -85,7 +85,7 @@ RUN npm install -g react-native-cli
 # download and unpack android
 RUN mkdir -p /opt/android && mkdir -p /opt/tools
 WORKDIR /opt/android
-RUN curl --silent https://dl.google.com/android/repository/tools_r$ANDROID_TOOLS_VERSION-linux.zip > android.zip && \
+RUN curl --silent https://dl.google.com/android/repository/build-tools_r$ANDROID_TOOLS_VERSION-linux.zip > android.zip && \
 	unzip android.zip && \
 	rm android.zip
 
